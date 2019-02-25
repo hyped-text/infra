@@ -1,0 +1,44 @@
+version: "3.5"
+
+volumes:
+  database:
+
+networks:
+  ingres:
+
+services:
+  traefik:
+    image: traefik
+    networks:
+      - ingres
+    ports:
+      - 80:80
+    command: --api --docker
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+    labels:
+      traefik.enable: 'true'
+      traefik.network: 'ingres'
+      traefik.frontend.rule: 'Host:traefik.localhost'
+      traefik.port: 8080
+
+  meta:
+    depends_on:
+      - database
+    image: hypedtext/meta:latest
+    networks:
+      - ingres
+    labels:
+      traefik.enable: 'true'
+      traefik.network: 'ingres'
+      traefik.frontend.rule: 'Host:app.localhost'
+      traefik.port: 8080
+
+  database:
+    image: postgres
+    networks:
+      - ingres
+    ports:
+      - 5432:5432
+    volumes:
+      - database:/var/lib/postgresql/data
