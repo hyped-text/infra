@@ -7,6 +7,6 @@
 [submodule "app"]
 	path = modules/app
 	url = git@github.com:hyped-text/app.git
-[submodule "gutenberg"]
-	path = modules/gutenberg
-	url = git@github.com:hyped-text/gutenberg.git
+[submodule "imports"]
+	path = modules/imports
+	url = git@github.com:hyped-text/imports.git
