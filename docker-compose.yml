@@ -45,7 +45,7 @@ services:
     ports:
       - 8081:8081
     volumes:
-      - ./modules/meta:/app
+      - $PWD/modules/meta:/app
     networks:
       - ingres
     labels:
@@ -60,7 +60,7 @@ services:
     ports:
       - 8082:3030
     volumes:
-      - /home/shonie/.fuseki:/fuseki
+      - $PWD/.fuseki:/fuseki
     networks:
       - ingres
     labels:
