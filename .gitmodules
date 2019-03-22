@@ -10,3 +10,6 @@
 [submodule "imports"]
 	path = modules/imports
 	url = git@github.com:hyped-text/imports.git
+[submodule "printer"]
+	path = modules/printer
+	url = git@github.com:hyped-text/printer.git
