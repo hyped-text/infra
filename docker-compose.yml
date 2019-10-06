@@ -3,6 +3,9 @@ version: "3.7"
 networks:
   ingres:
 
+volumes:
+  rdf_storage:
+
 services:
   traefik:
     image: traefik:1.7
@@ -24,14 +27,38 @@ services:
       traefik.frontend.rule: "Host:traefik.localhost"
       traefik.port: 8080
 
+  imports:
+    image: hypedtext/imports:latest
+    env_file: .env
+    container_name: imports
+    ports:
+      - 8083:8083
+    depends_on:
+      - rabbit
+    volumes:
+      - $PWD/modules/imports:/app
+      - rdf_storage:/root/.gutenberg
+    networks:
+      - ingres
+    expose:
+      - 8083
+    labels:
+      traefik.enable: "true"
+      traefik.network: "ingres"
+      traefik.frontend.rule: "Host:imports.localhost"
+      traefik.port: 8080
+
   rabbit:
     image: rabbitmq
-    ports:
-      - 15672:15672
     env_file: .env
     container_name: rabbit
     networks:
       - ingres
+    ports:
+      - 15672:15672
+    expose:
+      - 5672
+      - 15672
     labels:
       traefik.enable: "true"
       traefik.network: "ingres"
