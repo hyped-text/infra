@@ -1,79 +1,39 @@
-version: "3.5"
-
-volumes:
-  database:
+version: "3.7"
 
 networks:
   ingres:
 
 services:
   traefik:
-    image: traefik
+    image: traefik:1.7
+    command: --web --docker
+    ports:
+      # access this with the correct Host header to access the respective container
+      - "80:80"
+      # management UI
+      - "8080:8080"
+    volumes:
+      # traefik does its magic by reading information about running containers from the docker socket
+      - /var/run/docker.sock:/var/run/docker.sock
     networks:
       - ingres
-    ports:
-      - 80:80
     command: --api --docker
-    volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
     labels:
       traefik.enable: "true"
       traefik.network: "ingres"
       traefik.frontend.rule: "Host:traefik.localhost"
       traefik.port: 8080
 
-  gateway:
-    image: hypedtext/gateway:latest
-    env_file: .env
-    command: npm run start:dev
+  rabbit:
+    image: rabbitmq
     ports:
-      - 8080:8080
-    volumes:
-      - ./modules/gateway:/app
+      - 15672:15672
+    env_file: .env
+    container_name: rabbit
     networks:
       - ingres
     labels:
       traefik.enable: "true"
       traefik.network: "ingres"
-      traefik.frontend.rule: "Host:app.localhost"
+      traefik.frontend.rule: "Host:rabbit.localhost"
       traefik.port: 8080
-
-  meta:
-    image: hypedtext/meta:latest
-    env_file: .env
-    command: npm run start:dev
-    ports:
-      - 8081:8081
-    volumes:
-      - $PWD/modules/meta:/app
-    networks:
-      - ingres
-    labels:
-      traefik.enable: "true"
-      traefik.network: "ingres"
-      traefik.frontend.rule: "Host:meta.localhost"
-      traefik.port: 8081
-
-  fuseki:
-    image: stain/jena-fuseki:latest
-    env_file: .env
-    ports:
-      - 8082:3030
-    volumes:
-      - $PWD/.fuseki:/fuseki
-    networks:
-      - ingres
-    labels:
-      traefik.enable: "true"
-      traefik.network: "ingres"
-      traefik.frontend.rule: "Host:fuseki.localhost"
-      traefik.port: 8082
-
-  database:
-    image: postgres
-    networks:
-      - ingres
-    ports:
-      - 5433:5432
-    volumes:
-      - database:/var/lib/postgresql/data
