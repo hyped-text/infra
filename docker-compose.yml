@@ -31,6 +31,7 @@ services:
     image: hypedtext/imports:latest
     env_file: .env
     container_name: imports
+    command: npm run start:dev
     ports:
       - 8083:8083
     depends_on:
@@ -79,6 +80,8 @@ services:
       - 6080
     restart: on-failure
     command: dgraph zero --my=zero:5080
+    networks:
+      - ingres
 
   server:
     image: dgraph/dgraph:latest
@@ -94,6 +97,8 @@ services:
       - 9080:9080
     restart: on-failure
     command: dgraph alpha --my=server:7080 --lru_mb=2048 --zero=zero:5080
+    networks:
+      - ingres
 
   ratel:
     depends_on:
@@ -109,3 +114,5 @@ services:
     ports:
       - 8000:8000
     command: dgraph-ratel
+    networks:
+      - ingres
