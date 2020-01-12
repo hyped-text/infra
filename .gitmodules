@@ -1,6 +1,6 @@
 [submodule "imports"]
 	path = modules/imports
-	url = git@github.com:hyped-text/imports.git
+	url = git@github.com:katalogoc/imports.git
 [submodule "modules/meta"]
 	path = modules/meta
-	url = git@github.com:hyped-text/meta.git
+	url = git@github.com:katalogoc/meta.git

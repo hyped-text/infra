@@ -2,5 +2,5 @@
 Docker based infrastructure
 
 # Getting started
-- `git clone --recurse-submodules git@github.com:hyped-text/infra.git`
+- `git clone --recurse-submodules git@github.com:katalogoc/infra.git`
 - `docker-compose up`

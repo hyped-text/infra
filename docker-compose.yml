@@ -28,7 +28,7 @@ services:
       traefik.port: 8080
 
   imports:
-    image: hypedtext/imports:latest
+    image: katalogoc/imports:latest
     env_file: .env
     container_name: imports
     command: npm run start:dev
@@ -50,7 +50,7 @@ services:
       traefik.port: 8083
   
   meta:
-    image: hypedtext/meta:latest
+    image: katalogoc/meta:latest
     env_file: .env
     container_name: meta
     ports:
